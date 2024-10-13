@@ -1,50 +1,99 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const UserModel = require('./models/Users');
+const bcrypt = require('bcrypt');
+const UserModel = require('./models/Users'); // Ensure the correct path to your UserModel
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect("mongodb+srv://USERID:PASSWORD@cluster0.pfahtcu.mongodb.net/CURD?retryWrites=true&w=majority", { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log("database connected"))
+mongoose.connect("mongodb+srv://social-app:social-app123@cluster0.pfahtcu.mongodb.net/CURD?retryWrites=true&w=majority", { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log("Database connected"))
   .catch((err) => console.log(err));
 
-app.put('/userUpdate/:id',(req,res) =>{
+// Update user by ID
+app.put('/userUpdate/:id', async (req, res) => {
     const id = req.params.id;
-    UserModel.findByIdAndUpdate({_id:id}, {name:req.body.name, email: req.body.email, age: req.body.age})
-    .then(users => res.json(users))
-    .catch(err => res.json(err))
-})
-app.delete('/userDelete/:id',(req,res) =>{
-    const id = req.params.id;
-    UserModel.findByIdAndDelete(id)
-        .then(user => {
-            if (!user) {
-                return res.status(404).json({ message: "User not found" });
-            }
-            res.json({ message: "User deleted successfully" });
-        })
-        .catch(err => res.status(500).json({ message: err.message }));
-})
+    try {
+        const updatedUser = await UserModel.findByIdAndUpdate(
+            id,
+            { name: req.body.name, email: req.body.email, age: req.body.age },
+            { new: true, runValidators: true }
+        );
+        if (!updatedUser) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        res.json(updatedUser);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
 
-app.get('/user/:id', (req,res) =>{
+// Delete user by ID
+app.delete('/userDelete/:id', async (req, res) => {
     const id = req.params.id;
-    UserModel.findById({_id:id})
-    .then(users => res.json(users))
-    .catch(err => res.json(err))
-})
-app.get('/', (req,res) =>{
-    UserModel.find({})
-    .then(users => res.json(users))
-    .catch(err => res.json(err))
-})
+    try {
+        const user = await UserModel.findByIdAndDelete(id);
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        res.json({ message: "User deleted successfully" });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
 
-app.post("/create", (req, res) => {
-    UserModel.create(req.body)
-        .then(user => res.json(user))
-        .catch(err => res.json(err));
+// Get user by ID
+app.get('/user/:id', async (req, res) => {
+    const id = req.params.id;
+    try {
+        const user = await UserModel.findById(id);
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        res.json(user);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+// Get all users
+app.get('/', async (req, res) => {
+    try {
+        const users = await UserModel.find({});
+        res.json(users);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+// Create a new user
+app.post('/create', async (req, res) => {
+    try {
+        const newUser = await UserModel.create(req.body);
+        res.status(201).json(newUser);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+// Register a new user with hashed password
+app.post('/register', async (req, res) => {
+    try {
+        const { name, email, password } = req.body;
+        const existingUser = await UserModel.findOne({ email });
+
+        if (existingUser) {
+            return res.status(400).json({ message: "User already exists" });
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const newUser = await UserModel.create({ name, email, password: hashedPassword });
+        res.status(201).json({ message: "Account Created", user: newUser });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
 });
 
 app.listen(8000, () => {
