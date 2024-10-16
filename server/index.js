@@ -74,7 +74,9 @@ app.post('/create', async (req, res) => {
         const newUser = await UserModel.create(req.body);
         res.status(201).json(newUser);
     } catch (err) {
+        console.log(err);
         res.status(500).json({ message: err.message });
+        
     }
 });
 

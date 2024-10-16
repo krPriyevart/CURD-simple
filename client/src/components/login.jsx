@@ -13,7 +13,7 @@ function Login() {
     const handleSubmit = (e) => {
         e.preventDefault();
         const loginUser = {email, password };
-        axios.put(`http://localhost:8000/loginUser/${id}`, loginUser)
+        axios.put(`http://3.27.186.9:8181/loginUser/${id}`, loginUser)
             .then(() => {
                 console.log('User updated successfully');
                 navigate('/');

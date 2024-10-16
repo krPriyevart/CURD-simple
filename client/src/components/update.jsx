@@ -10,7 +10,7 @@ function Update() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get(`http://localhost:8000/user/${id}`)
+        axios.get(`http://3.27.186.9:8000/user/${id}`)
             .then(result => {
                 const user = result.data;
                 setEmail(user.email);
@@ -23,7 +23,7 @@ function Update() {
     const handleSubmit = (e) => {
         e.preventDefault();
         const updatedUser = { name, email, age };
-        axios.put(`http://localhost:8000/userUpdate/${id}`, updatedUser)
+        axios.put(`http://3.27.186.9:8000/userUpdate/${id}`, updatedUser)
             .then(() => {
                 console.log('User updated successfully');
                 navigate('/');
