@@ -6,13 +6,13 @@ function Home() {
     const [users, setUsers] = useState([]);
 
     useEffect(() => {
-        axios.get('http://localhost:8000')
+        axios.get('http://54.79.149.229:8000')
             .then(result => setUsers(result.data))
             .catch(err => console.log(err));
     }, []);
     const handleDelete = (id) => {
         //console.log("id is : " + id);
-        axios.delete(`http://localhost:8000/userDelete/${id}`)
+        axios.delete(`http://54.79.149.229:8000/userDelete/${id}`)
             .then(() => {
                 setUsers(users.filter(user => user._id !== id));
             })

@@ -12,7 +12,7 @@ function Create(){
       e.preventDefault();
       // Handle form submission logic here
       console.log('Email:', email);
-      axios.post("http://localhost:8000/create", {name,age,email})
+      axios.post("http://54.79.149.229:8000/create", {name,age,email})
       .then(result => {
         console.log(result);
         navigate('/')
