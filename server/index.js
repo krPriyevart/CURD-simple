@@ -67,14 +67,14 @@ app.get('/user/:id', async (req, res) => {
 });
 
 // Get all users
-// app.get('/', async (req, res) => {
-//     try {
-//         const users = await UserModel.find({});
-//         // res.json(users);
-//     } catch (err) {
-//         res.status(500).json({ message: err.message });
-//     }
-// });
+app.get('/', async (req, res) => {
+    try {
+        const users = await UserModel.find({});
+        // res.json(users);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
 
 // Create a new user
 app.post('/create', async (req, res) => {
