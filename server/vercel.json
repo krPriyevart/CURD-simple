@@ -12,7 +12,7 @@
         "dest": "/index.js",
         "method": ["GET","POST","PUT","DELETE","PATCH","OPTIONS"],
         "headers": {
-          "Access-Control-Allow-Origin": "*"
+          "Access-Control-Allow-Origin": "https://curd-simple-frontend.vercel.app"
         }
       }
     ]
