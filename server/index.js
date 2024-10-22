@@ -11,7 +11,7 @@ const UserModel = require('./models/Users'); // Ensure the correct path to your 
 // })
 const app = express();
 app.use(cors({
-    origin: ['*'],
+    origin: ['https://curd-simple-frontend.vercel.app'],
     credentials: true
 }))
 app.use(express.json());
