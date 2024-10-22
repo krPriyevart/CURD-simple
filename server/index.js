@@ -6,9 +6,9 @@ const bcrypt = require('bcrypt');
 const UserModel = require('./models/Users'); // Ensure the correct path to your UserModel
 
 
-dotenv.config({
-    path:'./.env'
-})
+// dotenv.config({
+//     path:'./.env'
+// })
 const app = express();
 app.use(cors({
     origin: ['*'],
@@ -16,7 +16,7 @@ app.use(cors({
 }))
 app.use(express.json());
 
-mongoose.connect(process.env.URI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect("mongodb+srv://social-app:social-app123@cluster0.pfahtcu.mongodb.net/CURD?retryWrites=true&w=majority", { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("Database connected"))
   .catch((err) => console.log(err));
 
@@ -108,6 +108,6 @@ app.post('/register', async (req, res) => {
 
 const port = process.env.PORT;
 
-app.listen(port, () => {
+app.listen(7000, () => {
     console.log(`Server is running on port: ${port}`);
 });
