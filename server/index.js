@@ -1,14 +1,22 @@
+const dotenv = require('dotenv')
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 const UserModel = require('./models/Users'); // Ensure the correct path to your UserModel
 
+
+dotenv.config({
+    path:'./.env'
+})
 const app = express();
-app.use(cors());
+app.use(cors({
+    origin: ['*'],
+    credentials: true
+}))
 app.use(express.json());
 
-mongoose.connect("mongodb+srv://social-app:social-app123@cluster0.pfahtcu.mongodb.net/CURD?retryWrites=true&w=majority", { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(process.env.URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("Database connected"))
   .catch((err) => console.log(err));
 
@@ -59,14 +67,14 @@ app.get('/user/:id', async (req, res) => {
 });
 
 // Get all users
-app.get('/', async (req, res) => {
-    try {
-        const users = await UserModel.find({});
-        res.json(users);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
-});
+// app.get('/', async (req, res) => {
+//     try {
+//         const users = await UserModel.find({});
+//         res.json(users);
+//     } catch (err) {
+//         res.status(500).json({ message: err.message });
+//     }
+// });
 
 // Create a new user
 app.post('/create', async (req, res) => {
@@ -98,6 +106,8 @@ app.post('/register', async (req, res) => {
     }
 });
 
-app.listen(8000, () => {
-    console.log("Server is running on port 8000");
+const port = process.env.PORT;
+
+app.listen(port, () => {
+    console.log(`Server is running on port: ${port}`);
 });
