@@ -10,7 +10,7 @@ function Update() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get(`http://54.79.149.229:8000/user/${id}`)
+        axios.get(`https://curd-simple-backend.vercel.app/user/${id}`)
             .then(result => {
                 const user = result.data;
                 setEmail(user.email);
@@ -23,7 +23,7 @@ function Update() {
     const handleSubmit = (e) => {
         e.preventDefault();
         const updatedUser = { name, email, age };
-        axios.put(`http://54.79.149.229:8000/userUpdate/${id}`, updatedUser)
+        axios.put(`https://curd-simple-backend.vercel.app/userUpdate/${id}`, updatedUser)
             .then(() => {
                 console.log('User updated successfully');
                 navigate('/');

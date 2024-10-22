@@ -12,7 +12,7 @@ function Create(){
       e.preventDefault();
       // Handle form submission logic here
       console.log('Email:', email);
-      axios.post("https://curd-simple-frontend.vercel.app/create", {name,age,email})
+      axios.post("https://curd-simple-backend.vercel.app/create", {name,age,email})
       .then(result => {
         console.log(result);
         navigate('/')
